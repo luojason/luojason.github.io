@@ -87,48 +87,40 @@ function loop() {
 		update();
 	}
 	if(mousePressed) { // sustain cell if mouse is pressed
-		cells[frame][mouseY][mouseX] = 1;
-		ctxt.fillStyle = '#ffffff';
-		ctxt.fillRect(mouseX*size, mouseY*size, size, size);
+		createCell(mouseX, mouseY);
 	}
 }
 
 /* -------------------- event handlers -------------------- */
-canvas.addEventListener('mousedown', function(e) {
-	mouseX = Math.floor(e.offsetX/size);
-	mouseY = Math.floor(e.offsetY/size);
+window.addEventListener('mousedown', function(e) {
+	mouseX = Math.floor(e.clientX/size);
+	mouseY = Math.floor(e.clientY/size);
 	mousePressed = true;
 
-	cells[frame][mouseY][mouseX] = 1;
-	ctxt.fillStyle = '#ffffff';
-	ctxt.fillRect(mouseX*size, mouseY*size, size, size);
+	createCell(mouseX, mouseY);
 });
 
-canvas.addEventListener('mouseup', function(e) {
+window.addEventListener('mouseup', function(e) {
 	mousePressed = false;
 });
 
-canvas.addEventListener('mousemove', function(e) {
-	mouseX = Math.floor(e.offsetX/size);
-	mouseY = Math.floor(e.offsetY/size);
+window.addEventListener('mousemove', function(e) {
+	mouseX = Math.floor(e.clientX/size);
+	mouseY = Math.floor(e.clientY/size);
 
 	if(mousePressed) {
-		cells[frame][mouseY][mouseX] = 1;
-		ctxt.fillStyle = '#ffffff';
-		ctxt.fillRect(mouseX*size, mouseY*size, size, size);
+		createCell(mouseX, mouseY);
 	}
 });
 
 /* -------------------- helper functions -------------------- */
-// sets color data; 'color' is specified as a rgba 4-array
-/*
-function setIndex(img, y, x, color) {
-	let flatIndex = (y*width + x)*4;
-	img.data[flatIndex+0] = color[0];
-	img.data[flatIndex+1] = color[1];
-	img.data[flatIndex+2] = color[2];
-	img.data[flatIndex+3] = color[3];
-}*/
+function createCell(x, y) {
+	if(0 <= x && x < width && 0 <= y && y < height) { // bounds check
+		cells[frame][y][x] = 1;
+		ctxt.fillStyle = '#ffffff';
+		ctxt.fillRect(x*size, y*size, size, size);
+	}
+}
 
 /* -------------------- start loop -------------------- */
 loop();
