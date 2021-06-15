@@ -7,16 +7,36 @@
 		<script type="text/javascript" src="main.js" defer></script>
 	</head>
 	<body>
-		<div class="hover-space">
-			<h1>Cellular Automata Project</h1>
+		<div class="application">
+			<div class="hover-space">
+				<h1>Cellular Automata Project</h1>
+			</div>
+			<main>
+				<canvas id="canvas">
+					<p>
+						&lt;canvas&gt; element not supported on this browser.
+						The Canvas API is used to display the automaton.
+					</p>
+				</canvas>
+			</main>
 		</div>
-		<main>
-			<canvas id="canvas">
-				<p>
-					&lt;canvas&gt; element not supported on this browser.
-					The Canvas API is used to display the automaton.
-				</p>
-			</canvas>
-		</main>
+		<div class="info-box">
+			<section id="toggle-box-button">
+				Help
+			</section>
+			<section id="settings">
+				<h2>Settings</h2>
+				<label for="speed">Update Speed:</label>
+				<input type="range" name="speed" id="speed">
+			</section>
+			<section id="info">
+				<h2>About - Conway's Game of Life</h2>
+				<p>test text test text test text test text test text test text test text
+				test text test text test text test text test text test text test text
+				test text test text test text test text test text test text test text
+				test text test text test text test text test text test text test text
+				test text test text test text test text test text test text test text</p>
+			</section>
+		</div>
 	</body>
 </html>

@@ -92,7 +92,8 @@ function loop() {
 }
 
 /* -------------------- event handlers -------------------- */
-window.addEventListener('mousedown', function(e) {
+const app = document.querySelector('.application');
+app.addEventListener('mousedown', function(e) {
 	mouseX = Math.floor(e.clientX/size);
 	mouseY = Math.floor(e.clientY/size);
 	mousePressed = true;
@@ -100,11 +101,11 @@ window.addEventListener('mousedown', function(e) {
 	createCell(mouseX, mouseY);
 });
 
-window.addEventListener('mouseup', function(e) {
+app.addEventListener('mouseup', function(e) {
 	mousePressed = false;
 });
 
-window.addEventListener('mousemove', function(e) {
+app.addEventListener('mousemove', function(e) {
 	mouseX = Math.floor(e.clientX/size);
 	mouseY = Math.floor(e.clientY/size);
 
@@ -112,6 +113,14 @@ window.addEventListener('mousemove', function(e) {
 		createCell(mouseX, mouseY);
 	}
 });
+
+// prevent header from highlighting on selection
+document.querySelector('.application h1').addEventListener(
+	'selectstart',
+	function(e) {
+		e.preventDefault();
+	}
+)
 
 /* -------------------- helper functions -------------------- */
 function createCell(x, y) {
