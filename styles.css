@@ -10,7 +10,12 @@ html {
 /* -------------------- general styling -------------------- */
 html, body {
 	margin: 0;
-	background-color: darkgrey;
+	background-color: black;
+}
+
+body {
+	position: relative;
+	overflow: hidden;
 }
 
 h1 {
@@ -20,11 +25,6 @@ h1 {
 
 h2 {
 	margin-block-start: 0.5em;
-}
-
-#canvas {
-	display: block;
-	margin: 0 auto;
 }
 
 /* -------------------- dynamic header -------------------- */
@@ -37,7 +37,7 @@ h2 {
 h1 {
 	color: rgba(255, 255, 255, 0);
 	text-shadow: none;
-	background-color: rgba(200, 200, 200, 0.65);
+	background-color: rgba(150, 150, 150, 0.8);
 	transform: translate(-100%, 0);
 	transition: transform 0.2s ease-in-out,
 		color 0.2s ease-in,
@@ -62,25 +62,57 @@ h1 {
 	display: grid;
 	grid-template-columns: 0fr 1fr 3fr;
 
-	background-color: rgba(200, 200, 200, 0.65);
-	border-top-left-radius: 1em;
-	border-bottom-left-radius: 1em;
+	/* only show toggle-button when deactivated */
+	transform: translate(calc(100% - 2em), 0);
+	transition: transform 0.2s ease-out;
+}
+
+.info-box.active {
+	transform: none;
 }
 
 .info-box > section {
 	padding: 1em;
 	border-inline-start: solid black 2px;
+	background-color: rgba(150, 150, 150, 0.8);
 }
 
 .info-box > section:first-child {
 	border-inline-start: none;
+	border-top-left-radius: 1em;
+	border-bottom-left-radius: 1em;
 }
 
-#toggle-box-button {
+#toggle {
+	writing-mode: vertical-lr;
 	padding-block-start: .5em;
 	padding-block-end: .5em;
+	cursor: pointer;
+}
 
-	writing-mode: vertical-lr;
-	transform: rotate(180deg);
+#toggle > p {
+	margin: 0;
+	line-height: 1em;
 	text-align: center;
+	transform: rotate(180deg);
+}
+
+#toggle:focus, #toggle:hover {
+	background-color: rgba(200, 200, 200, 0.8);
+}
+
+#toggle:active {
+	background-color: rgba(240, 240, 240, 0.8);
+}
+
+/* implement help button movement */
+.info-box > section {
+	position: relative;
+	left: 1.5em;
+	transition: left 0.1s ease-out;
+}
+
+.info-box:hover > section,
+.info-box.active > section {
+	left: 0;
 }

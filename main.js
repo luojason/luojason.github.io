@@ -122,6 +122,23 @@ document.querySelector('.application h1').addEventListener(
 	}
 )
 
+// toggle info box
+const info = document.querySelector('.info-box');
+const button = document.querySelector('#toggle');
+const buttonText = document.querySelector('#toggle > p');
+let active = false;
+button.addEventListener('click', function(e) {
+	if(active) {
+		info.classList.remove('active');
+		buttonText.textContent = 'Help';
+		active = false;
+	} else {
+		info.classList.add('active');
+		buttonText.textContent = 'Close Help';
+		active = true;
+	}
+})
+
 /* -------------------- helper functions -------------------- */
 function createCell(x, y) {
 	if(0 <= x && x < width && 0 <= y && y < height) { // bounds check
