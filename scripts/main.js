@@ -1,9 +1,19 @@
 /* -------------------- setup -------------------- */
+// target elements
+const app = document.querySelector('.application');
 const canvas = document.querySelector('#canvas');
 const ctxt = canvas.getContext('2d');
+const info = document.querySelector('.info-box');
+const buttonText = document.querySelector('#toggle > p');
+const about = document.querySelector('#info');
+
+// interactive elements
 const speedControl = document.querySelector('#speed');
 const animControl = document.querySelector('#play-pause');
-let renderRequest;
+const rulesControl = document.querySelector('#select-rules');
+const button = document.querySelector('#toggle');
+
+let renderRequest; // for disabling animation on pause
 
 const size = 5; // side length of each cell in pixels
 const width = Math.ceil(window.innerWidth/size);
@@ -22,7 +32,7 @@ let mousePressed = false;
 /* -------------------- automata functions -------------------- */
 //placeholder
 let automata = conway;
-automata.init(ctxt, width, height);
+automata.init(width, height);
 
 
 /* -------------------- animation loop -------------------- */
@@ -39,8 +49,7 @@ function loop() {
 }
 
 /* -------------------- event handlers -------------------- */
-const app = document.querySelector('.application');
-app.addEventListener('mousedown', function(e) {
+app.addEventListener('mousedown', e => {
 	mouseX = Math.floor(e.clientX/size);
 	mouseY = Math.floor(e.clientY/size);
 	mousePressed = true;
@@ -48,11 +57,11 @@ app.addEventListener('mousedown', function(e) {
 	automata.mouseAction(mouseX, mouseY);
 });
 
-app.addEventListener('mouseup', function(e) {
+app.addEventListener('mouseup', e => {
 	mousePressed = false;
 });
 
-app.addEventListener('mousemove', function(e) {
+app.addEventListener('mousemove', e => {
 	mouseX = Math.floor(e.clientX/size);
 	mouseY = Math.floor(e.clientY/size);
 
@@ -70,11 +79,8 @@ document.querySelector('.application h1').addEventListener(
 );
 
 // toggle info box
-const info = document.querySelector('.info-box');
-const button = document.querySelector('#toggle');
-const buttonText = document.querySelector('#toggle > p');
 let active = false;
-button.addEventListener('click', function(e) {
+button.addEventListener('click', () => {
 	if(active) {
 		info.classList.remove('active');
 		buttonText.textContent = 'Help';
@@ -87,13 +93,13 @@ button.addEventListener('click', function(e) {
 });
 
 // change speed of animation
-speedControl.addEventListener('input', function(e) {
+speedControl.addEventListener('input', () => {
 	framerate = speedControl.value;
 });
 
 // pause/unpause animation
 let paused = false;
-animControl.addEventListener('click', function(e) {
+animControl.addEventListener('click', () => {
 	if(paused) {
 		animControl.textContent = 'Pause';
 		loop();
@@ -105,7 +111,58 @@ animControl.addEventListener('click', function(e) {
 	}
 });
 
+// load new automata
+rulesControl.addEventListener('change', () => {
+	loadAutomata(rulesControl.value);
+});
+
 /* -------------------- helper functions -------------------- */
+function fill(color) {
+	ctxt.fillStyle = color;
+	ctxt.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function fillCell(x, y, color) {
+	ctxt.fillStyle = color;
+	ctxt.fillRect(x*size, y*size, size, size);
+}
+
+function loadAutomata(name) {
+	rulesControl.setAttribute('disabled', ''); // forbid rule changing while loading
+	about.children[0].textContent = '';
+	for(let i = about.children.length-1; i > 0; i--) { // remove old text
+		about.children[i].remove();
+	}
+
+	fetch(`desc/${name}.json`)
+	.then(response => response.json())
+	.then(data => {
+		// populate new text
+		about.children[0].textContent = `About - ${data.title}`; // new title
+		let para;
+		for(let i = 0; i < data.contents.length; i++) { // new contents
+			para = document.createElement('p');
+			para.textContent = data.contents[i];
+			about.appendChild(para);
+		}
+		para = document.createElement('p'); // new source/link
+		para.textContent = 'Source: ';
+		let link = document.createElement('a');
+		link.setAttribute('href', data.link);
+		link.textContent = data.source;
+		para.appendChild(link);
+		about.appendChild(para);
+	})
+	.catch(err => {
+		let para = document.createElement('p');
+		para.textContent = `load error: ${err.message}`;
+		about.appendChild(para);
+	})
+	.finally(() => {
+		rulesControl.removeAttribute('disabled'); // re-enable rule-changing
+	});
+}
 
 /* -------------------- start loop -------------------- */
+loadAutomata('conway');
 loop();

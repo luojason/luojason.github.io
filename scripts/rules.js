@@ -1,6 +1,6 @@
 /* -------------------- automata for Game of Life -------------------- */
 var conway = {
-	init: function(ctxt, width, height) {
+	init: function(width, height) {
 		// initialize grid of cells; need two to store current vs next layout
 		let cells = [[], []];
 		for(let i = 0; i < height; i++) {
@@ -13,8 +13,7 @@ var conway = {
 		this.height = height;
 
 		// all cells start off dead
-		ctxt.fillStyle = 'black';
-		ctxt.fillRect(0, 0, canvas.width, canvas.height);
+		fill('#000000');
 	},
 
 	update: function() {
@@ -34,8 +33,7 @@ var conway = {
 	mouseAction: function(x, y) {
 		if(0 <= x && x < width && 0 <= y && y < height) { // bounds check
 			this.cells[this.frame][y][x] = 1;
-			ctxt.fillStyle = '#ffffff';
-			ctxt.fillRect(x*size, y*size, size, size);
+			fillCell(x, y, '#ffffff');
 		}
 	},
 
@@ -62,14 +60,12 @@ var conway = {
 		if(current[i][j] == 1) { // check death conditions
 			if(neighbours != 2 && neighbours != 3) {
 				next[i][j] = 0;
-				ctxt.fillStyle = '#000000'; // set to black
-				ctxt.fillRect(j*size, i*size, size, size);
+				fillCell(j, i, '#000000'); // set to black
 			}
 		} else {
 			if(neighbours == 3) { // check birth conditions
 				next[i][j] = 1;
-				ctxt.fillStyle = '#ffffff'; // set to white
-				ctxt.fillRect(j*size, i*size, size, size);
+				fillCell(j, i, '#ffffff'); // set to white
 			}
 		}
 	}
