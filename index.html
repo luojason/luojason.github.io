@@ -4,7 +4,8 @@
 		<meta charset="utf-8">
 		<title>Cellular Automata Project</title>
 		<link rel="stylesheet" href="styles.css" type="text/css">
-		<script type="text/javascript" src="main.js" defer></script>
+		<script type="application/javascript" src="scripts/rules.js"></script>
+		<script type="application/javascript" src="scripts/main.js" defer></script>
 	</head>
 	<body>
 		<div class="application">
@@ -26,16 +27,46 @@
 			</section>
 			<section id="settings">
 				<h2>Settings</h2>
-				<label for="speed">Update Speed (not implemented):</label>
-				<input type="range" name="speed" id="speed">
+				<div class="control">
+					<label for="select-rules">Automata:</label>
+					<select id="select-rules">
+						<option value="conway">Conway's Game of Life</option>
+						<option value="langton">Langton's Ant</option>
+					</select>
+				</div>
+				<p>Click/drag with the mouse to interact with the automaton.</p>
+				<div class="control">
+					<label for="speed">Update Speed:</label>
+					<input type="range" id="speed" min="1" max="20" value="10">
+				</div>
+				<div class="control">
+					<label for="play-pause">Pause/Resume Animation:</label>
+					<button type="button" id="play-pause">Pause</button>
+				</div>
 			</section>
 			<section id="info">
-				<h2>About - Conway's Game of Life</h2>
-				<p>test text test text test text test text test text test text test text
-				test text test text test text test text test text test text test text
-				test text test text test text test text test text test text test text
-				test text test text test text test text test text test text test text
-				test text test text test text test text test text test text test text</p>
+				<h2>About</h2>
+				<h3>Conway's Game of Life</h3>
+				<p>
+					The Game of Life is a 2d cellular automaton,
+					where each cell is either 'alive' or 'dead'.
+					At each tick, the new state of a given cell is determined by
+					the current states of its neighbours (ie adjacent cells).
+					In this implementation, borders wrap around
+					(such that the grid is like a torus).
+				</p>
+				<p>
+					If a living cell has 2 or 3 living neighbours,
+					it remains alive in the next generation; otherwise, it dies.
+					On the other hand, if a dead cell has exactly 3 live neighbours,
+					it will become live in the next generation.
+				</p>
+				<p>
+					Source:
+					<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+						Wikipedia
+					</a>
+				</p>
 			</section>
 		</div>
 	</body>
