@@ -1,9 +1,10 @@
+// every automata needs to have init(), update(), and mouseAction() implemented
 /* -------------------- automata for Game of Life -------------------- */
 var conway = {
 	init: function(width, height) {
 		// initialize grid of cells; need two to store current vs next layout
 		let cells = [[], []];
-		for(let i = 0; i < height; i++) {
+		for(let i = 0; i < height; i++) { // row-major indexing
 			cells[0][i] = new Int8Array(width);
 			cells[1][i] = new Int8Array(width);
 		}
@@ -66,6 +67,52 @@ var conway = {
 			if(neighbours == 3) { // check birth conditions
 				next[i][j] = 1;
 				fillCell(j, i, '#ffffff'); // set to white
+			}
+		}
+	}
+}
+
+/* -------------------- automata for Langton's ant -------------------- */
+var langton = {
+	init: function(width, height) {
+		// initialize grid of cells
+		this.grid = [];
+		for(let i = 0; i < width; i++) { // column-major indexing
+			this.grid[i] = new Int8Array(height);
+		}
+		this.antPos = [Math.floor(width/2), Math.floor(height/2)];
+		this.antDir = 3; // direction: [0,1,2,3] -> [N,E,S,W]
+		this.width = width;
+		this.height = height;
+
+		// all cells start off white: 0 -> white, 1 -> black
+		fill('#ffffff');
+		fillCell(this.antPos[0], this.antPos[1], '#ff0000');
+	},
+
+	update: function() {
+		let x = this.antPos[0];
+		let y = this.antPos[1];
+		let val = this.grid[x][y];
+		this.antDir = (this.antDir + 1 + 2*val)%4; // rotate ant
+
+		this.grid[x][y] = (val + 1)%2; // flip tile color
+		fillCell(x, y, (val == 0)? '#000000':'#ffffff');
+
+		// move ant, with looping behaviour
+		this.antPos[0] = (x + (2 - this.antDir)%2 + this.width)%this.width;
+		this.antPos[1] = (y + (this.antDir - 1)%2 + this.height)%this.height;
+		fillCell(this.antPos[0], this.antPos[1], '#ff0000');
+	},
+
+	mouseAction: function(x, y) { // flips cell colors
+		if(0 <= x && x < width && 0 <= y && y < height) { // bounds check
+			if(this.grid[x][y] == 0) {
+				this.grid[x][y] = 1;
+				fillCell(x, y, '#000000');
+			} else {
+				this.grid[x][y] = 0;
+				fillCell(x, y, '#ffffff');
 			}
 		}
 	}

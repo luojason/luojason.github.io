@@ -1,0 +1,10 @@
+{
+	"title" : "Langton's Ant" ,
+	"contents" :
+		[
+			"Langton's Ant is a 2d cellular automaton based on a grid of black and white cells, as well as a single special cell (displayed in red) designated as the 'ant'. The ant faces in any of the cardinal directions. At each tick, the ant flips the color of the cell it occupies, rotates 90 degrees left/right if the cell was originally black/white respectively, and then moves forward one step. In this implementation, borders wrap around (such that the grid is like a torus).",
+			"The following implementation is the most basic version of this automata. Variations may allow for multiple ants to move at once, and for these ants to behave differently (eg change directions opposite to the rules described above), etc."
+		],
+	"source" : "Wikipedia",
+	"link" : "https://en.wikipedia.org/wiki/Langton%27s_ant"
+}

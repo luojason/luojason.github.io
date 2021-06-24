@@ -29,12 +29,6 @@ speedControl.value = framerate;
 let mouseX, mouseY;
 let mousePressed = false;
 
-/* -------------------- automata functions -------------------- */
-//placeholder
-let automata = conway;
-automata.init(width, height);
-
-
 /* -------------------- animation loop -------------------- */
 function loop() {
 	renderRequest = requestAnimationFrame(loop);
@@ -43,9 +37,9 @@ function loop() {
 		counter = 0;
 		automata.update();
 	}
-	if(mousePressed) { // sustain cell if mouse is pressed
+	/*if(mousePressed) { // sustain cell if mouse is pressed
 		automata.mouseAction(mouseX, mouseY);
-	}
+	}*/
 }
 
 /* -------------------- event handlers -------------------- */
@@ -99,7 +93,7 @@ speedControl.addEventListener('input', () => {
 
 // pause/unpause animation
 let paused = false;
-animControl.addEventListener('click', () => {
+function togglePlayPause() {
 	if(paused) {
 		animControl.textContent = 'Pause';
 		loop();
@@ -109,7 +103,8 @@ animControl.addEventListener('click', () => {
 		cancelAnimationFrame(renderRequest);
 		paused = true;
 	}
-});
+}
+animControl.addEventListener('click', togglePlayPause);
 
 // load new automata
 rulesControl.addEventListener('change', () => {
@@ -128,6 +123,8 @@ function fillCell(x, y, color) {
 }
 
 function loadAutomata(name) {
+	if(!paused) { togglePlayPause(); }
+	animControl.setAttribute('disabled', '');
 	rulesControl.setAttribute('disabled', ''); // forbid rule changing while loading
 	about.children[0].textContent = '';
 	for(let i = about.children.length-1; i > 0; i--) { // remove old text
@@ -137,7 +134,6 @@ function loadAutomata(name) {
 	fetch(`desc/${name}.json`)
 	.then(response => response.json())
 	.then(data => {
-		// populate new text
 		about.children[0].textContent = `About - ${data.title}`; // new title
 		let para;
 		for(let i = 0; i < data.contents.length; i++) { // new contents
@@ -159,10 +155,13 @@ function loadAutomata(name) {
 		about.appendChild(para);
 	})
 	.finally(() => {
+		animControl.removeAttribute('disabled');
 		rulesControl.removeAttribute('disabled'); // re-enable rule-changing
+
+		automata = window[name];
+		automata.init(width, height);
 	});
 }
 
-/* -------------------- start loop -------------------- */
+/* -------------------- start -------------------- */
 loadAutomata('conway');
-loop();
